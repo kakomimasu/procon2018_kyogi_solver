@@ -16,6 +16,9 @@
 ソルバーとして動作させるには、事前に[GUI](https://github.com/nnct-jo-ken/procon2018_kyogi_GUI)を起動させておいてください。  
 `colaboratory.ipynb`を使用すると、Colaboratoryを利用して対局データの生成と学習を行うことができます。
 
+conda create --name procon2018 python=3.10
+pip install torch numpy
+
 ```
 # 対局データの生成
 python create_record.py

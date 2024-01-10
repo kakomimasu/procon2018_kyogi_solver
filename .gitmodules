@@ -1,0 +1,3 @@
+[submodule "core-python"]
+	path = core-python
+	url = https://github.com/kakomimasu/core-python
