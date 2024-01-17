@@ -23,6 +23,14 @@ class field:
     def clear(self):    #フィールド情報をクリア
         self.width = 0   #縦
         self.height = 0  #横
+
+        # 敵味方合わせた、陣地情報
+        # 　フィールドのサイズに合わせて、どのフィールドが敵なのか、味方なのか、空なのかを保存
+        # エージェントがどこにいるのかの位置情報も、フィールドの形に合わせて保存する
+        # 各エージェントの位置をリストで保持する（不定形なので学習データには使用しない）
+        # 　これは、まあ個別に保持するしかない
+        # 個別のエージェントごとのエリアは必要か？？というか、そもそもそんな概念は無さそう
+
         self.own_a1, self.own_a2, self.opponent_a1, self.opponent_a2 = {'x':0, 'y':0}, {'x':0, 'y':0}, {'x':0, 'y':0}, {'x':0, 'y':0}   #エージェントの位置
         self.value = np.zeros([self.width, self.height], dtype=int)    #タイルの得点
         self.own_state = np.zeros([self.width, self.height], dtype=int)    #味方の陣形

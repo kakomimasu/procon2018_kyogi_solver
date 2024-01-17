@@ -18,7 +18,7 @@
 
 ```
 conda create --name procon2018 python=3.10
-pip install torch numpy
+pip install torch numpy fastapi uvicorn
 git submodule init
 ```
 
