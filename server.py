@@ -2,24 +2,30 @@ import socket
 import game
 import solver
 import json
-import kakomimasu_py
-from fastapi import FastAPI
-
-print(kakomimasu_py.Game)
+from fastapi import FastAPI, Form
 
 app = FastAPI()
 
 # field = game.field()
 
-@app.get("/oninit")
-async def oninit(board_points: str, total_turn: int, agent_count: int):
+@app.post("/oninit")
+async def oninit(
+    board_points: str = Form(),
+    total_turn: int = Form(),
+    agent_count: int = Form()
+):
     print("board points", board_points)
     print("total turn", total_turn)
     print("agent count", agent_count)
     # field.clear()
 
-@app.get("/onturn")
-async def onturn(field: str, player_number: int, agents: str, turn: int):
+@app.post("/onturn")
+async def onturn(
+    field: str = Form(),
+    player_number: int = Form(),
+    agents: str = Form(),
+    turn: int = Form()
+):
     print("field", field)
     print("player number", player_number)
     print("agents", agents)
