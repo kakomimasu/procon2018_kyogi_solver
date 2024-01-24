@@ -74,3 +74,39 @@ def solve(field):
     #     buf += ':'
     #     num += 1
     return buf
+
+def solve2(field):
+    '''
+    今は、ランダムで返しているだけ
+    各プレーヤーの移動方向を、相対座標で出力
+    '''
+
+    MODEL_PATH = './output/best_model.pth'
+    if os.path.exists(MODEL_PATH):
+        model = network.Network()
+        model.load_state_dict(torch.load(MODEL_PATH, map_location=lambda storage, loc: storage))
+
+    if NEURAL_PLAYER is True:   #機械学習
+        player = neural_player.DQNPlayer(model)   # ***後で、きちんと書く！***
+    elif NEURAL_PLAYER is False:    #モンテカルロ木探索
+        player = basic_player.RandomMTS(100, 5)
+    print("***************************************************************")
+    own_a1_hand = player.select(field, game.OWN_1)
+    own_a2_hand = player.select(field, game.OWN_2)
+    
+    print("★own_a1_hand", own_a1_hand)
+    print("★own_a2_hand", own_a2_hand)
+
+    hands = [None, None]
+    if own_a1_hand is not None:
+        hands[0] = {
+            "x": own_a1_hand[0]["x"],
+            "y": own_a1_hand[0]["y"]
+        }
+    if own_a2_hand is not None:
+        hands[1] = {
+            "x": own_a2_hand[0]["x"],
+            "y": own_a2_hand[0]["y"]
+        }
+        
+    return hands

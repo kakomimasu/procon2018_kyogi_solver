@@ -20,7 +20,7 @@ RANDOM_CREATE = True   #True:ランダムに着手 False:学習済みのモデ�
 LR = 0.0001   #学習率(learning rate)
 BATCH_GAME_SIZE = 1 #一度に学習する試合数
 TEST_GAME_NUMBER = 3    #テスト時に使用する試合数
-EPOCH = 50 #1つの訓練データを何回学習させるか
+EPOCH = 5 #1つの訓練データを何回学習させるか
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "./output/model.pth")       #モデルの保存パス
 BEST_MODEL_PATH = os.path.join(os.path.dirname(__file__), "./output/best_model.pth")       #最善モデルの保存パス
