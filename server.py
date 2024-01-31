@@ -3,10 +3,18 @@ import game
 import solver
 import json
 from game import *
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, Request
 import numpy as np
+import time
 
 app = FastAPI()
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    print("Time took to process the request and return response is {} sec".format(time.time() - start_time))
+    return response
 
 # field = game.field()
 
@@ -79,7 +87,7 @@ async def onturn(
                     field2.opponent_a2["x"] = x
                     field2.opponent_a2["y"] = y
 
-    # タイルの特典
+    # タイルの得点
     field2.value = np.zeros([field2.width, field2.height], dtype=int)
     for y in range(field2.height):
         for x in range(field2.width):

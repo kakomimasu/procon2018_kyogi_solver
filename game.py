@@ -17,7 +17,7 @@ OPPONENT_2 = -2
 EXISTENCE = 1   #プレーヤーがいる
 EMPTY = 0       #空のマス
 
-MAX_BOARD_SIZE = 12
+MAX_BOARD_SIZE = 10
 
 class field:
     def clear(self):    #フィールド情報をクリア
@@ -35,6 +35,8 @@ class field:
         self.value = np.zeros([self.width, self.height], dtype=int)    #タイルの得点
         self.own_state = np.zeros([self.width, self.height], dtype=int)    #味方の陣形
         self.opponent_state = np.zeros([self.width, self.height], dtype=int)    #敵の陣形
+        # ↑ここまで入
+
         self.own_status = [] #味方のターンごとの陣形を管理
         self.opponent_status = [] #敵のターンごとの陣形を管理
         self.a1_poss = []   #エージェント1の座標を管理
@@ -48,25 +50,44 @@ class field:
         # while sum_tile // self.width > 12:  #heightが13以上だとルールに反しているから、12以下になるまで乱数生成
         #     self.width = random.randint(7, 12)
         # self.height = sum_tile // self.width    #横の大きさをランダムに決定 上のループで、ルールに適合するはず
-        self.width = 11
-        self.height = 8
+        self.width = 10
+        self.height = 10
         self.value = np.resize(self.value, (self.width, self.height))
         self.own_state = np.resize(self.own_state, (self.width, self.height))
         self.opponent_state = np.resize(self.opponent_state, (self.width, self.height))
-        self.own_a1['x'] = random.randint(0, self.width//2) #エージェントの位置をランダムに決定
-        self.own_a1['y'] = random.randint(0, self.height//2)
-        self.opponent_a1['x'] = random.randint(0, self.width//2)
-        self.opponent_a1['y'] = random.randint(0, self.height//2)
 
-        bunkatsu = random.randint(0, 2) #0:水平垂直 1:水平 2:垂直
+        # 初期位置はランダム
+        all_pos = []
+        for x in range(self.width):
+            for y in range(self.height):
+                all_pos.append((x, y))
+        random.shuffle(all_pos)
 
-        #エージェントの位置を線対称にする
-        if bunkatsu == 0 or bunkatsu == 1:  #水平に線対称
-            self.own_a2['x'] = self.width - self.own_a1['x'] - 1
-            self.opponent_a2['x'] = self.width - self.opponent_a1['x'] - 1
-        if bunkatsu == 0 or bunkatsu == 2:  #垂直に線対称
-            self.own_a2['y'] = self.height - self.own_a1['y'] - 1
-            self.opponent_a2['y'] = self.height - self.opponent_a1['y'] - 1
+        a = all_pos.pop()
+        self.own_a1['x'] = a[0]
+        self.own_a1['y'] = a[1]
+
+        a = all_pos.pop()
+        self.own_a2['x'] = a[0]
+        self.own_a2['y'] = a[1]
+
+        a = all_pos.pop()
+        self.opponent_a1['x'] = a[0]
+        self.opponent_a1['y'] = a[1]
+
+        a = all_pos.pop()
+        self.opponent_a2['x'] = a[0]
+        self.opponent_a2['y'] = a[1]    
+
+        # bunkatsu = 0 #0:水平垂直 1:水平 2:垂直
+
+        # #エージェントの位置を線対称にする
+        # if bunkatsu == 0 or bunkatsu == 1:  #水平に線対称
+        #     self.own_a2['x'] = self.width - self.own_a1['x'] - 1
+        #     self.opponent_a2['x'] = self.width - self.opponent_a1['x'] - 1
+        # if bunkatsu == 0 or bunkatsu == 2:  #垂直に線対称
+        #     self.own_a2['y'] = self.height - self.own_a1['y'] - 1
+        #     self.opponent_a2['y'] = self.height - self.opponent_a1['y'] - 1
 
         #エージェントの位置をstateに反映
         self.own_state[self.own_a1['x']][self.own_a1['y']] = EXISTENCE
@@ -74,29 +95,43 @@ class field:
         self.opponent_state[self.opponent_a1['x']][self.opponent_a1['y']] = EXISTENCE
         self.opponent_state[self.opponent_a2['x']][self.opponent_a2['y']] = EXISTENCE
 
-        for i in range(0, self.width):
-            for j in range(0, self.height):
+        # 囲みマス
+        self.value = np.array([
+            [12, 3, 5, 3, 1, 1, 3, 5, 3,12],
+            [ 3, 5, 7, 5, 3, 3, 5, 7, 5, 3],
+            [ 5, 7,10, 7, 5, 5, 7,10, 7, 5],
+            [ 3, 5, 7, 5, 3, 3, 5, 7, 5, 3],
+            [ 1, 3, 5, 3,12,12, 3, 5, 3, 1],
+            [ 1, 3, 5, 3,12,12, 3, 5, 3, 1],
+            [ 3, 5, 7, 5, 3, 3, 5, 7, 5, 3],
+            [ 5, 7,10, 7, 5, 5, 7,10, 7, 5],
+            [ 3, 5, 7, 5, 3, 3, 5, 7, 5, 3],
+            [12, 3, 5, 3, 1, 1, 3, 5, 3,12]
+        ])
 
-                rand_value = random.randint(-10, 10*18)  #マイナスの点数を5%くらいに抑えるため
-                if rand_value > 0:
-                    rand_value //= 18   #正の点数は、範囲に収まるように、9で割った商を代入
+        # for i in range(0, self.width):
+        #     for j in range(0, self.height):
 
-                self.value[i][j] = rand_value
+        #         rand_value = random.randint(-10, 10*18)  #マイナスの点数を5%くらいに抑えるため
+        #         if rand_value > 0:
+        #             rand_value //= 18   #正の点数は、範囲に収まるように、9で割った商を代入
 
-                if bunkatsu == 0 or bunkatsu == 1:  #水平に線対称
-                    if self.width % 2 == 0:   #偶数
-                        if i > self.width / 2 - 1:   #下半分
-                            self.value[i][j] = self.value[self.width-i-1][j]
-                    else:
-                        if i > self.width / 2:
-                            self.value[i][j] = self.value[self.width-i-1][j]
-                if bunkatsu == 0 or bunkatsu == 2:    #垂直に線対称
-                    if self.height % 2 == 0:  #偶数
-                        if j > self.height / 2 - 1:  #右半分
-                            self.value[i][j] = self.value[i][self.height-j-1]
-                    else:
-                        if j > self.height / 2:
-                            self.value[i][j] = self.value[i][self.height-j-1]
+        #         self.value[i][j] = rand_value
+
+        #         if bunkatsu == 0 or bunkatsu == 1:  #水平に線対称
+        #             if self.width % 2 == 0:   #偶数
+        #                 if i > self.width / 2 - 1:   #下半分
+        #                     self.value[i][j] = self.value[self.width-i-1][j]
+        #             else:
+        #                 if i > self.width / 2:
+        #                     self.value[i][j] = self.value[self.width-i-1][j]
+        #         if bunkatsu == 0 or bunkatsu == 2:    #垂直に線対称
+        #             if self.height % 2 == 0:  #偶数
+        #                 if j > self.height / 2 - 1:  #右半分
+        #                     self.value[i][j] = self.value[i][self.height-j-1]
+        #             else:
+        #                 if j > self.height / 2:
+        #                     self.value[i][j] = self.value[i][self.height-j-1]
 
     def create_from_file(self, path):
         self.width, self.height, self.value, self.own_a1, self.own_a2 = load_field_file.load_field_file(path)

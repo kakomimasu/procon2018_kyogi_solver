@@ -11,7 +11,8 @@ import neural_player
 
 DEBUG = False    #デバッグ時はTrue
 RANDOM_CREATE = True   #True:ランダムに着手 False:学習済みのモデルを使用RECORD_NUM = 10  #対局データ作成数
-TURN = 90   #1試合あたりのターン数
+RECORD_NUM = 100  #対局データ作成数
+TURN = 30   #1試合あたりのターン数
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "record")  #出力ディレクトリ
 os.makedirs(OUTPUT_DIR, exist_ok=True)  #出力ディレクトリの作成
 

@@ -8,7 +8,7 @@ import game
 import player
 import recently_hands
 
-DEBUG = False
+DEBUG = True
 
 a1_recently_hands = recently_hands.Recently_hands()
 a2_recently_hands = recently_hands.Recently_hands()
