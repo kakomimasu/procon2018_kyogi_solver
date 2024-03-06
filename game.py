@@ -1,11 +1,21 @@
 # coding: utf-8
 
+from enum import Enum
 import numpy as np
 import random
 import copy
 import load_field_file
 
 DEBUG = False    #デバッグ時はTrue
+
+class Team(Enum):
+    OWN = 0
+    OPPONENT = 1
+
+class TileStatus(Enum):
+    EMPTY = 0
+    FILL = 1
+    WALL = 2
 
 OWN = 3         #自チーム
 OPPONENT = -3   #敵チーム

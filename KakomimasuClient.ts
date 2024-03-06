@@ -239,7 +239,10 @@ class KakomimasuClient {
     await sleep(diffTime(this.gameInfo.startedAtUnixTime));
     const res = await this.apiClient.getMatch(this.gameId);
     if (res.success) this.gameInfo = res.data;
-    else throw Error("Get Match Error");
+    else {
+      console.error(res.data);
+      throw Error("Get Match Error");
+    }
     console.log(this.gameInfo);
     this.log = [this.gameInfo];
     console.log("totalTurn", this.gameInfo.totalTurn);
@@ -257,7 +260,10 @@ class KakomimasuClient {
       this.pic,
     );
     //console.log("setActions", res);
-    if (res.success === false) throw Error("Set Action Error");
+    if (res.success === false) {
+      console.error(res.data);
+      throw Error("Set Action Error");
+    }
   }
 
   async waitNextTurn() { // GameInfo? (null if end)
@@ -273,7 +279,10 @@ class KakomimasuClient {
 
     for (;;) {
       const res = await this.apiClient.getMatch(this.gameId);
+      
+      console.log("waitNextTurn")
       if (res.success) {
+        console.log("waitNextTurn turn:",res.data.turn)
         this.gameInfo = res.data;
         break;
       }
