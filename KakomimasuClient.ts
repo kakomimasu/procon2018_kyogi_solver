@@ -7,7 +7,7 @@ import {
   type JoinMatchReqBase,
   type JoinMatchRes,
   // } from "../client-js/deno/mod.ts";
-} from "https://raw.githubusercontent.com/kakomimasu/client-js/v1.0.0-beta.13/deno/mod.ts";
+} from "https://raw.githubusercontent.com/kakomimasu/client-js/v1.0.0-beta.14/deno/mod.ts";
 
 function sleep(msec: number) {
   return new Promise<void>((resolve) => {
@@ -53,7 +53,7 @@ class KakomimasuClient {
   apiClient: ApiClient;
 
   constructor(
-    param:
+    param: 
       & {
         host?: string;
         aiName?: JoinAiMatchReq["aiName"];
