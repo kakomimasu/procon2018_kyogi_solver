@@ -1,30 +1,17 @@
-import dataclasses
-from KakomimasuType import *
+from dataclasses import dataclass
+from typing import List
+from KakomimasuType import KakomimasuGame, KakomimasuField
 
-@dataclasses.dataclass
+@dataclass
 class KakomimasuClient():
     name: str
     spec: str
     bearerToken: str
-    aiName
+    aiName: str
     aiBoard: str
     gameId: str
     pic: str
     pno: int
-    gameInfo
-    field: KakomimasuField
-    log
-
-
-
-#   private name?: string;
-#   private spec?: string;
-#   private bearerToken?: string;
-#   private aiName?: JoinAiMatchReq["aiName"];
-#   private aiBoard?: string;
-#   private gameId?: string;
-#   private pic?: string;
-#   private pno?: number;
-#   private gameInfo?: Game;
-#   private field?: Field[][];
-#   private log?: Game[];
+    gameInfo: KakomimasuGame
+    field: List[List[KakomimasuField]]
+    log: List[KakomimasuGame]
