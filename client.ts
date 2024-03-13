@@ -2,7 +2,7 @@
 import { ActionPost, KakomimasuClient } from "./KakomimasuClient.ts";
 import { DIR, Pnt, rnd, sortByPoint } from "./client_util.ts";
 
-export const client = new KakomimasuClient({ name: "MLくん", spec: "", aiName: "a1", aiBoard: "A-1" });
+export const client = new KakomimasuClient({ name: "MLくん", spec: "", aiName: "a1", aiBoard: "A-1", nAgent: 2 });
 const pntall: Pnt[] = [];
 
 client.oninit = async (boardPoints, agentCount, totalTurn) => {

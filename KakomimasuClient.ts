@@ -48,6 +48,7 @@ class KakomimasuClient {
   private gameInfo?: Game;
   private field?: Field[][];
   private log?: Game[];
+  private nAgent?: number;
 
   apiClient: ApiClient;
 
@@ -58,6 +59,7 @@ class KakomimasuClient {
         aiName?: JoinAiMatchReq["aiName"];
         aiBoard?: string;
         gameId?: string;
+        nAgent?: number;
       }
       & ({ name: string; spec?: string } | { bearerToken: string }),
   ) {
@@ -80,6 +82,7 @@ class KakomimasuClient {
     this.aiName = param.aiName;
     this.aiBoard = param.aiBoard;
     this.gameId = param.gameId;
+    this.nAgent = 2;
   }
 
   async waitMatching() { // GameInfo
@@ -98,7 +101,7 @@ class KakomimasuClient {
       //   boardName: this.aiBoard,
       // };
       matchRes = await this.apiClient.joinAiMatch(
-        { ...matchParam, aiName: this.aiName, boardName: this.aiBoard },
+        { ...matchParam, aiName: this.aiName, boardName: this.aiBoard, nAgent: this.nAgent },
         `Bearer ${this.bearerToken}`,
       );
     } else if (this.gameId) {
